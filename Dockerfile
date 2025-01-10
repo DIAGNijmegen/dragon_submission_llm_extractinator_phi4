@@ -17,10 +17,17 @@ RUN python -m pip install --user -U pip && python -m pip install --user pip-tool
 COPY --chown=user:user requirements.txt /opt/app/
 RUN python -m pip install --user -r requirements.txt
 
+# Install Ollama
+RUN curl -fsSL https://ollama.com/install.sh | sh
+
+# Move the model weights to the right folder
+# COPY --chown=user models ~/.ollama/models
+COPY --chown=user models /opt/app/models
+ENV OLLAMA_MODELS=/opt/app/models
+
 # Download the model, tokenizer and metrics
-RUN mkdir -p /opt/app/models
-COPY --chown=user:user download_model.py /opt/app/
-RUN python download_model.py --model_name distilbert-base-multilingual-cased
+# COPY --chown=user:user download_model.py /opt/app/
+# RUN python download_model.py --model_name distilbert-base-multilingual-cased
 # Adapt to the model you want to download, e.g.:
 # RUN python download_model.py --model_name joeranbosma/dragon-roberta-base-mixed-domain
 COPY --chown=user:user download_metrics.py /opt/app/
