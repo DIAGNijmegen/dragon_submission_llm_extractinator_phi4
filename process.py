@@ -46,12 +46,19 @@ class DragonSubmission(DragonBaseline):
         """
         Override the process method to use llm_extractinator for predictions.
         """
+        print("Loading data...")
         self.load()
+        print("Validating data...")
         self.validate()
+        print("Analyzing data...")
         self.analyze()
+        print("Preprocessing data...")
         self.preprocess()
+        print("Setting up folder structure...")
         self.setup_folder_structure()
+        print("Extracting predictions...")
         self.extract_predictions()
+        print("Postprocessing predictions...")
         self.postprocess()
         self.verify_predictions()
 
@@ -244,7 +251,7 @@ class DragonSubmission(DragonBaseline):
         elif task_id == "025":
             print_processing_message(task_id)
             try:
-
+                
                 pass
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")

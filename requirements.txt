@@ -178,6 +178,8 @@ jsonpointer==3.0.0
     # via jsonpatch
 kubernetes==31.0.0
     # via chromadb
+langchain
+    # via llm-extractinator
 langchain-chroma==0.2.0
     # via llm-extractinator
 langchain-core==0.3.29

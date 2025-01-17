@@ -32,7 +32,7 @@ ENV OLLAMA_MODELS=/opt/app/models
 # RUN python download_model.py --model_name joeranbosma/dragon-roberta-base-mixed-domain
 COPY --chown=user:user download_metrics.py /opt/app/
 RUN python download_metrics.py
-COPY llm_extractinator /opt/app/llm_extractinator
+COPY --chown=user:user llm_extractinator /opt/app/llm_extractinator
 
 # Set the environment variables
 ENV TRANSFORMERS_OFFLINE=1

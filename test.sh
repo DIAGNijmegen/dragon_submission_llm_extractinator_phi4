@@ -32,7 +32,7 @@ do
         --pids-limit="256" \
         -v $SCRIPTPATH/test-input/$jobname:/input:ro \
         -v dragon-output-$VOLUME_SUFFIX:/output \
-        joeranbosma/dragon_submission
+        lmmasters/dragon_submission
 
     # Display the output file
     docker run --rm \
