@@ -23,7 +23,7 @@ RUN curl -fsSL https://ollama.com/install.sh | sh
 # Move the model weights to the right folder
 # COPY --chown=user models ~/.ollama/models
 COPY --chown=user models /opt/app/models
-ENV OLLAMA_MODELS=/opt/app/models
+# ENV OLLAMA_MODELS=/opt/app/models
 
 # Download the model, tokenizer and metrics
 # COPY --chown=user:user download_model.py /opt/app/
