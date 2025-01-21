@@ -224,9 +224,9 @@ class DragonSubmission(DragonBaseline):
                         example["label"] = 1.0
                     if example["label"] == "False" or example["label"] == False:
                         example["label"] = 0.0
-                    example[self.task.input_name] = example.pop("label")
+                    example[self.task.target.prediction_name] = example.pop("label")
                 data = drop_keys_except(
-                    data, ["uid", self.task.input_name]
+                    data, ["uid", self.task.target.prediction_name]
                 )
             except KeyError:
                 print(f"Task {task_id} does not contain 'label' key.")
@@ -236,11 +236,11 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    example[self.task.input_name] = example.pop(
+                    example[self.task.target.prediction_name] = example.pop(
                         "label"
                     )
                 data = drop_keys_except(
-                    data, ["uid", self.task.input_name]
+                    data, ["uid", self.task.target.prediction_name]
                 )
             except KeyError:
                 print(f"Task {task_id} does not contain 'label' key.")
@@ -250,8 +250,8 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    example[self.task.input_name] = example.pop("label")
-                data = drop_keys_except(data, ["uid", self.task.input_name])
+                    example[self.task.target.prediction_name] = example.pop("label")
+                data = drop_keys_except(data, ["uid", self.task.target.prediction_name])
             except KeyError:
                 print(f"Task {task_id} does not contain 'label' key.")
                 pass
@@ -260,7 +260,7 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    example[self.task.input_name] = [
+                    example[self.task.target.prediction_name] = [
                         example.pop("biopsy"),
                         example.pop("cancer"),
                         example.pop("high_grade_dysplasia"),
@@ -270,7 +270,7 @@ class DragonSubmission(DragonBaseline):
                         example.pop("serrated_polyps"),
                     ]
                 data = drop_keys_except(
-                    data, ["uid", self.task.input_name]
+                    data, ["uid", self.task.target.prediction_name]
                 )
                 for example in data:
                     for key, value in example.items():
@@ -286,7 +286,7 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    example[self.task.input_name] = [
+                    example[self.task.target.prediction_name] = [
                         example.pop("lesion_1"),
                         example.pop("lesion_2"),
                         example.pop("lesion_3"),
@@ -294,7 +294,7 @@ class DragonSubmission(DragonBaseline):
                         example.pop("lesion_5"),
                     ]
                 data = drop_keys_except(
-                    data, ["uid", self.task.input_name]
+                    data, ["uid", self.task.target.prediction_name]
                 )
                 for example in data:
                     for key, value in example.items():
@@ -310,12 +310,12 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    example[self.task.input_name] = [
+                    example[self.task.target.prediction_name] = [
                         example.pop("attenuation"),
                         example.pop("location"),
                     ]
                 data = drop_keys_except(
-                    data, ["uid", self.task.input_name]
+                    data, ["uid", self.task.target.prediction_name]
                 )
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
@@ -325,12 +325,12 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    example[self.task.input_name] = [
+                    example[self.task.target.prediction_name] = [
                         example.pop("left"),
                         example.pop("right"),
                     ]
                 data = drop_keys_except(
-                    data, ["uid", self.task.input_name]
+                    data, ["uid", self.task.target.prediction_name]
                 )
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
@@ -340,14 +340,14 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    example[self.task.input_name] = [
+                    example[self.task.target.prediction_name] = [
                         example.pop("lesion_1"),
                         example.pop("lesion_2"),
                         example.pop("lesion_3"),
                         example.pop("lesion_4"),
                         example.pop("lesion_5"),
                     ]
-                data = drop_keys_except(data, ["uid", self.task.input_name])
+                data = drop_keys_except(data, ["uid", self.task.target.prediction_name])
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
                 pass
@@ -385,8 +385,8 @@ class DragonSubmission(DragonBaseline):
                                 for j in range(1, orig_len):
                                     ner_target[i + j] = f"I-{entity}"
                                 break  # Stop after the first match to avoid overlapping entities
-                    example(self.task.input_name) = ner_target
-                data = drop_keys_except(data, ["uid", self.task.input_name])
+                    example[self.task.target.prediction_name] = ner_target
+                data = drop_keys_except(data, ["uid", self.task.target.prediction_name])
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
                 pass
@@ -395,7 +395,7 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    example[self.task.input_name] = [
+                    example[self.task.target.prediction_name] = [
                         example.pop("lesion_1"),
                         example.pop("lesion_2"),
                         example.pop("lesion_3"),
@@ -403,7 +403,7 @@ class DragonSubmission(DragonBaseline):
                         example.pop("lesion_5"),
                     ]
                 data = drop_keys_except(
-                    data, ["uid", self.task.input_name]
+                    data, ["uid", self.task.target.prediction_name]
                 )
                 for example in data:
                     for key, value in example.items():
@@ -419,12 +419,12 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    example[self.task.input_name] = [
+                    example[self.task.target.prediction_name] = [
                         example.pop("diagnosis"),
                         example.pop("treatment"),
                     ]
                 data = drop_keys_except(
-                    data, ["uid", self.task.input_name]
+                    data, ["uid", self.task.target.prediction_name]
                 )
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
@@ -434,14 +434,14 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    example[self.task.input_name] = [
+                    example[self.task.target.prediction_name] = [
                         example.pop("measurement_1"),
                         example.pop("measurement_2"),
                         example.pop("measurement_3"),
                         example.pop("measurement_4"),
                         example.pop("measurement_5"),
                     ]
-                data = drop_keys_except(data, ["uid", self.task.input_name])
+                data = drop_keys_except(data, ["uid", self.task.target.prediction_name])
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
                 pass
@@ -479,8 +479,8 @@ class DragonSubmission(DragonBaseline):
                                 for j in range(1, orig_len):
                                     ner_target[i + j] = f"I-{entity}"
                                 break  # Stop after the first match to avoid overlapping entities
-                    example(self.task.input_name) = ner_target
-                data = drop_keys_except(data, ["uid", self.task.input_name])
+                    example[self.task.target.prediction_name] = ner_target
+                data = drop_keys_except(data, ["uid", self.task.target.prediction_name])
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
                 pass
@@ -524,8 +524,8 @@ class DragonSubmission(DragonBaseline):
                     # Convert lists to strings, using 'O' if the list is empty
                     ner_target = ["O" if not tags else ",".join(tags) for tags in ner_target]
 
-                    example[self.task.input_name] = ner_target
-                data = drop_keys_except(data, ["uid", self.task.input_name])
+                    example[self.task.target.prediction_name] = ner_target
+                data = drop_keys_except(data, ["uid", self.task.target.prediction_name])
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
                 pass
