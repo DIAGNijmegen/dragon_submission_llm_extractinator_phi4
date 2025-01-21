@@ -1,31 +1,21 @@
 {
     "Task": "Named Entity Recognition for Medical Texts",
     "Type": "Named Entity Recognition",
-    "Description": "The task involves identifying named entities in segmented medical text parts, classifying tokens into specific categories such as PREFIX, SYMPTOM, DIAGNOSIS, STRUCTURE, ROMAN_NUMERAL, and NOTE.",
+    "Description": "The task involves identifying named entities in segmented medical text parts and classifying tokens into specific categories. Create a list of lists where each inner list contains two entries: 1. The exact sequence of text that qualifies an entity. 2. The corresponding predefined category tag (e.g., 'PREFIX', 'SYMPTOM', 'DIAGNOSIS', etc.). If no entities are present in the text, return an empty list. These categories include: PREFIX (Indicates a prefix or title in the text), SYMPTOM (Indicates a symptom entity in the text), DIAGNOSIS (Indicates a diagnosis entity in the text), STRUCTURE (Indicates a structural entity such as a measurement or object), ROMAN_NUMERAL (Indicates a Roman numeral in the text), NOTE (Indicates a note or recommendation). The task uses data provided in `test.json`, with the input field being `text` and the target label field being `named_entity_recognition_target`.",
     "Data_Path": "test.json",
-    "Input_Field": "text_parts",
+    "Input_Field": "text",
     "Label_Field": "named_entity_recognition_target",
-    "Entity_Classes": {
-        "B-PREFIX": "Indicates the beginning of a prefix or title in the text.",
-        "I-PREFIX": "Indicates a continuation of a prefix or title.",
-        "B-SYMPTOM": "Indicates the beginning of a symptom entity in the text.",
-        "I-SYMPTOM": "Indicates a continuation of a symptom entity.",
-        "B-DIAGNOSIS": "Indicates the beginning of a diagnosis entity in the text.",
-        "I-DIAGNOSIS": "Indicates a continuation of a diagnosis entity.",
-        "B-STRUCTURE": "Indicates the beginning of a structural entity such as a measurement or object.",
-        "I-STRUCTURE": "Indicates a continuation of a structural entity.",
-        "B-ROMAN_NUMERAL": "Indicates the beginning of a Roman numeral in the text.",
-        "B-NOTE": "Indicates the beginning of a note or recommendation.",
-        "I-NOTE": "Indicates a continuation of a note or recommendation."
-    },
     "Parser_Format": {
-        "text_parts": {
-            "type": "list of strings",
-            "description": "Segmented parts of the input text, each word or token represented as a separate string."
-        },
-        "named_entity_recognition_target": {
-            "type": "list of strings",
-            "description": "Corresponding tags for each token, representing the NER classification."
+        "anonymized_text": {
+            "type": "list",
+            "description": "The list of strings and their respective tags.",
+            "items": {
+                "type": "list",
+                "items": {
+                    "type": "str",
+                    "Optional": "True"
+                }
+            }
         }
     }
 }

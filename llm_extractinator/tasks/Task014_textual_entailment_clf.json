@@ -3,7 +3,7 @@
     "Type": "Classification",
     "Description": "This task involves analyzing pairs of sentences to determine their relationship. The output should classify the relationship as either contradiction, neutral, or entailment.",
     "Data_Path": "test.json",
-    "Input_Field": "text_parts",
+    "Input_Field": "text",
     "Label_Field": "single_label_multi_class_classification_target",
     "Parser_Format": {
         "reasoning": {
