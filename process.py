@@ -135,7 +135,7 @@ class DragonSubmission(DragonBaseline):
 
         extractinate(
             task_id=self.task_id,
-            model_name="gemma2:2b",
+            model_name="gemma2:9b",
             num_examples=0,
             max_context_len=8192,
             num_predict=512,
@@ -320,9 +320,16 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    example[self.task.target.prediction_name] = example.pop("lesion_sizes")
-                    # Go through the list of lesion sizes and fill it to a length of 5 with Nones
-                    example[self.task.target.prediction_name] = example[self.task.target.prediction_name] + [None] * (5 - len(example[self.task.target.prediction_name]))
+                    # example[self.task.target.prediction_name] = example.pop("lesion_sizes")
+                    # # Go through the list of lesion sizes and fill it to a length of 5 with Nones
+                    # example[self.task.target.prediction_name] = example[self.task.target.prediction_name] + [None] * (5 - len(example[self.task.target.prediction_name]))
+                    example[self.task.target.prediction_name] = [
+                        example.pop("lesion_1"),
+                        example.pop("lesion_2"),
+                        example.pop("lesion_3"),
+                        example.pop("lesion_4"),
+                        example.pop("lesion_5"),
+                    ]
                 data = drop_keys_except(data, ["uid", self.task.target.prediction_name])
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
@@ -421,10 +428,16 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    example[self.task.target.prediction_name] = example.pop("lesion_sizes")
-                    # Go through the list of lesion sizes and fill it to a length of 5 with Nones
-                    example[self.task.target.prediction_name] = example[self.task.target.prediction_name] + [None] * (5 - len(example[self.task.target.prediction_name]))
-                
+                    # example[self.task.target.prediction_name] = example.pop("lesion_sizes")
+                    # # Go through the list of lesion sizes and fill it to a length of 5 with Nones
+                    # example[self.task.target.prediction_name] = example[self.task.target.prediction_name] + [None] * (5 - len(example[self.task.target.prediction_name]))
+                    example[self.task.target.prediction_name] = [
+                        example.pop("lesion_1"),
+                        example.pop("lesion_2"),
+                        example.pop("lesion_3"),
+                        example.pop("lesion_4"),
+                        example.pop("lesion_5"),
+                    ]
                 data = drop_keys_except(data, ["uid", self.task.target.prediction_name])
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
