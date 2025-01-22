@@ -550,13 +550,12 @@ class DragonSubmission(DragonBaseline):
                                     break  # Stop after the first match for this entity
 
                         if not has_valid_tuple:
-                            # If no valid tuples were found, set ner_target to all "O"
-                            ner_target = ["O"] * len(text_parts)
+                            # If no valid tuples were found, set ner_target to [["O"]] for all tokens
+                            ner_target = [["O"] for _ in range(len(text_parts))]
                         else:
-                            # Convert lists to strings, using 'O' if the list is empty
-                            ner_target = ["O" if not tags else ",".join(tags) for tags in ner_target]
+                            # Ensure each token's tags are in the form of lists
+                            ner_target = [["O"] if not tags else tags for tags in ner_target]
 
-                        ner_target = [label.split(",") for label in ner_target]
                         example[self.task.target.prediction_name] = ner_target
                     except Exception as e:
                         print(f"Error processing example with uid {example.get('uid', 'unknown')}: {e}")
