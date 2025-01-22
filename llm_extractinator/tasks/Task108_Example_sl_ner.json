@@ -6,7 +6,7 @@
     "Input_Field": "text",
     "Label_Field": "named_entity_recognition_target",
     "Parser_Format": {
-        "anonymized_text": {
+        "medical_text_parts": {
             "type": "list",
             "description": "The list of strings and their respective tags.",
             "items": {

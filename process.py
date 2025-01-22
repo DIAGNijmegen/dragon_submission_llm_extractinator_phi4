@@ -236,9 +236,9 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    example[self.task.target.prediction_name] = example.pop(
+                    example[self.task.target.prediction_name] = str(example.pop(
                         "label"
-                    )
+                    ))
                 data = drop_keys_except(
                     data, ["uid", self.task.target.prediction_name]
                 )
@@ -260,24 +260,13 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
+                    keys = ["biopsy", "cancer", "high_grade_dysplasia", "hyperplastic_polyps", "low_grade_dysplasia", "non_informative", "serrated_polyps"]
                     example[self.task.target.prediction_name] = [
-                        example.pop("biopsy"),
-                        example.pop("cancer"),
-                        example.pop("high_grade_dysplasia"),
-                        example.pop("hyperplastic_polyps"),
-                        example.pop("low_grade_dysplasia"),
-                        example.pop("non_informative"),
-                        example.pop("serrated_polyps"),
+                        1.0 if example.pop(key) in ["True", True] else 0.0 for key in keys
                     ]
                 data = drop_keys_except(
                     data, ["uid", self.task.target.prediction_name]
                 )
-                for example in data:
-                    for key, value in example.items():
-                        if value == "True" or value == True:
-                            example[key] = 1.0
-                        if value == "False" or value == False:
-                            example[key] = 0.0
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
                 pass
@@ -286,22 +275,13 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
+                    keys = ["lesion_1", "lesion_2", "lesion_3", "lesion_4", "lesion_5"]
                     example[self.task.target.prediction_name] = [
-                        example.pop("lesion_1"),
-                        example.pop("lesion_2"),
-                        example.pop("lesion_3"),
-                        example.pop("lesion_4"),
-                        example.pop("lesion_5"),
+                        1.0 if example.pop(key) in ["True", True] else 0.0 for key in keys
                     ]
                 data = drop_keys_except(
                     data, ["uid", self.task.target.prediction_name]
                 )
-                for example in data:
-                    for key, value in example.items():
-                        if value == "True" or value == True:
-                            example[key] = 1.0
-                        if value == "False" or value == False:
-                            example[key] = 0.0
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
                 pass
@@ -356,36 +336,57 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    text_parts = example.pop("text_parts")
-                    anonymized_text = example.pop("anonymized_text")
-                    ner_target = ["O"] * len("text_parts")
+                    try:
+                        text_parts = example.pop("text_parts")
+                        anonymized_text = example.pop("anonymized_text")
 
-                    # Regex pattern to validate tags containing < and >
-                    valid_tag_pattern = re.compile(r"<.*?>")
+                        # Initialize ner_target with 'O' for all tokens
+                        ner_target = ["O"] * len(text_parts)
 
-                    for orig, entity in anonymized_text:
-                        # Skip if the tag is invalid
-                        if not valid_tag_pattern.match(entity):
-                            continue
+                        # Regex pattern to validate tags containing < and >
+                        valid_tag_pattern = re.compile(r"<.*?>")
 
-                        # Tokenize the original text
-                        orig_tokens = orig.split()
-                        orig_len = len(orig_tokens)
+                        has_valid_tuple = False
 
-                        if orig_len == 0:
-                            continue  # Skip empty entities
+                        for item in anonymized_text:
+                            # Ensure item is a tuple with two elements
+                            if not isinstance(item, (list, tuple)) or len(item) != 2:
+                                continue  # Skip invalid items
 
-                        # Match tokens using a sliding window
-                        for i in range(len(text_parts) - orig_len + 1):
-                            # Check if the token window matches the entity tokens
-                            if text_parts[i:i + orig_len] == orig_tokens:
-                                # Label the first token as B-<ENTITY>
-                                ner_target[i] = f"B-{entity}"
-                                # Label subsequent tokens as I-<ENTITY>
-                                for j in range(1, orig_len):
-                                    ner_target[i + j] = f"I-{entity}"
-                                break  # Stop after the first match to avoid overlapping entities
-                    example[self.task.target.prediction_name] = ner_target
+                            orig, entity = item
+
+                            # Skip if the tag is invalid
+                            if not valid_tag_pattern.match(entity):
+                                continue
+
+                            has_valid_tuple = True
+
+                            # Tokenize the original text
+                            orig_tokens = orig.split()
+                            orig_len = len(orig_tokens)
+
+                            if orig_len == 0:
+                                continue  # Skip empty entities
+
+                            # Match tokens using a sliding window
+                            for i in range(len(text_parts) - orig_len + 1):
+                                # Check if the token window matches the entity tokens
+                                if text_parts[i:i + orig_len] == orig_tokens:
+                                    # Label the first token as B-<ENTITY>
+                                    ner_target[i] = f"B-{entity}"
+                                    # Label subsequent tokens as I-<ENTITY>
+                                    for j in range(1, orig_len):
+                                        ner_target[i + j] = f"I-{entity}"
+                                    break  # Stop after the first match to avoid overlapping entities
+
+                        if not has_valid_tuple:
+                            # If no valid tuples were found, set ner_target to all "O"
+                            ner_target = ["O"] * len(text_parts)
+
+                        ner_target = [label.split(",") for label in ner_target]
+                        example[self.task.target.prediction_name] = ner_target
+                    except Exception as e:
+                        print(f"Error processing example with uid {example.get('uid', 'unknown')}: {e}")
                 data = drop_keys_except(data, ["uid", self.task.target.prediction_name])
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
@@ -395,22 +396,13 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
+                    keys = ["lesion_1", "lesion_2", "lesion_3", "lesion_4", "lesion_5"]
                     example[self.task.target.prediction_name] = [
-                        example.pop("lesion_1"),
-                        example.pop("lesion_2"),
-                        example.pop("lesion_3"),
-                        example.pop("lesion_4"),
-                        example.pop("lesion_5"),
+                        1.0 if example.pop(key) in ["True", True] else 0.0 for key in keys
                     ]
                 data = drop_keys_except(
                     data, ["uid", self.task.target.prediction_name]
                 )
-                for example in data:
-                    for key, value in example.items():
-                        if value == "True" or value == True:
-                            example[key] = 1.0
-                        if value == "False" or value == False:
-                            example[key] = 0.0
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
                 pass
@@ -429,7 +421,7 @@ class DragonSubmission(DragonBaseline):
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
                 pass
-            save_json(data=data, filepath=filepath)
+            save_json(data=data, filepath=filepath) 
         elif task_id == "107":
             print_processing_message(task_id)
             try:
@@ -450,36 +442,57 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    text_parts = example.pop("text_parts")
-                    anonymized_text = example.pop("anonymized_text")
-                    ner_target = ["O"] * len("text_parts")
+                    try:
+                        text_parts = example.pop("text_parts")
+                        anonymized_text = example.pop("medical_text_parts")
 
-                    # Regex pattern to validate tags containing < and >
-                    valid_tag_pattern = re.compile(r"(PREFIX|SYMPTOM|DIAGNOSIS|STRUCTURE|ROMAN_NUMERAL|NOTE)")
+                        # Initialize ner_target with 'O' for all tokens
+                        ner_target = ["O"] * len(text_parts)
 
-                    for orig, entity in anonymized_text:
-                        # Skip if the tag is invalid
-                        if not valid_tag_pattern.match(entity):
-                            continue
+                        # Regex pattern to validate tags containing < and >
+                        valid_tag_pattern = re.compile(r"(PREFIX|SYMPTOM|DIAGNOSIS|STRUCTURE|ROMAN_NUMERAL|NOTE)")
 
-                        # Tokenize the original text
-                        orig_tokens = orig.split()
-                        orig_len = len(orig_tokens)
+                        has_valid_tuple = False
 
-                        if orig_len == 0:
-                            continue  # Skip empty entities
+                        for item in anonymized_text:
+                            # Ensure item is a tuple with two elements
+                            if not isinstance(item, (list, tuple)) or len(item) != 2:
+                                continue  # Skip invalid items
 
-                        # Match tokens using a sliding window
-                        for i in range(len(text_parts) - orig_len + 1):
-                            # Check if the token window matches the entity tokens
-                            if text_parts[i:i + orig_len] == orig_tokens:
-                                # Label the first token as B-<ENTITY>
-                                ner_target[i] = f"B-{entity}"
-                                # Label subsequent tokens as I-<ENTITY>
-                                for j in range(1, orig_len):
-                                    ner_target[i + j] = f"I-{entity}"
-                                break  # Stop after the first match to avoid overlapping entities
-                    example[self.task.target.prediction_name] = ner_target
+                            orig, entity = item
+
+                            # Skip if the tag is invalid
+                            if not valid_tag_pattern.match(entity):
+                                continue
+
+                            has_valid_tuple = True
+
+                            # Tokenize the original text
+                            orig_tokens = orig.split()
+                            orig_len = len(orig_tokens)
+
+                            if orig_len == 0:
+                                continue  # Skip empty entities
+
+                            # Match tokens using a sliding window
+                            for i in range(len(text_parts) - orig_len + 1):
+                                # Check if the token window matches the entity tokens
+                                if text_parts[i:i + orig_len] == orig_tokens:
+                                    # Label the first token as B-<ENTITY>
+                                    ner_target[i] = f"B-{entity}"
+                                    # Label subsequent tokens as I-<ENTITY>
+                                    for j in range(1, orig_len):
+                                        ner_target[i + j] = f"I-{entity}"
+                                    break  # Stop after the first match to avoid overlapping entities
+
+                        if not has_valid_tuple:
+                            # If no valid tuples were found, set ner_target to all "O"
+                            ner_target = ["O"] * len(text_parts)
+
+                        ner_target = [label.split(",") for label in ner_target]
+                        example[self.task.target.prediction_name] = ner_target
+                    except Exception as e:
+                        print(f"Error processing example with uid {example.get('uid', 'unknown')}: {e}")
                 data = drop_keys_except(data, ["uid", self.task.target.prediction_name])
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
@@ -489,42 +502,60 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    text_parts = example.pop("text_parts")
-                    anonymized_text = example.pop("anonymized_text")
-                    
-                    # Initialize ner_target with lists for overlapping tags
-                    ner_target = [[] for _ in range(len(text_parts))]
+                    try:
+                        text_parts = example.pop("text_parts")
+                        anonymized_text = example.pop("lesion_sizes")
 
-                    # Regex pattern to validate tags containing < and >
-                    valid_tag_pattern = re.compile(r".*")
+                        # Initialize ner_target with lists for overlapping tags
+                        ner_target = [[] for _ in range(len(text_parts))]
 
-                    for idx, (orig, entity) in enumerate(anonymized_text):
-                        # Skip if the tag is invalid
-                        if not valid_tag_pattern.match(entity):
-                            continue
+                        # Regex pattern to validate tags containing < and >
+                        valid_tag_pattern = re.compile(r".*")
 
-                        # Tokenize the original text
-                        orig_tokens = orig.split()
-                        orig_len = len(orig_tokens)
+                        has_valid_tuple = False
 
-                        if orig_len == 0:
-                            continue  # Skip empty entities
+                        for idx, item in enumerate(anonymized_text):
+                            # Ensure item is a tuple with two elements
+                            if not isinstance(item, (list, tuple)) or len(item) != 2:
+                                continue  # Skip invalid items
 
-                        # Match tokens using a sliding window
-                        for i in range(len(text_parts) - orig_len + 1):
-                            # Check if the token window matches the entity tokens
-                            if text_parts[i:i + orig_len] == orig_tokens:
-                                # Assign B-<ENTITY> to the first token
-                                ner_target[i].append(f"B-{idx}-lesion")
-                                # Assign I-<ENTITY> to subsequent tokens
-                                for j in range(1, orig_len):
-                                    ner_target[i + j].append(f"I-{idx}-lesion")
-                                break  # Stop after the first match for this entity
+                            orig, entity = item
 
-                    # Convert lists to strings, using 'O' if the list is empty
-                    ner_target = ["O" if not tags else ",".join(tags) for tags in ner_target]
+                            # Skip if the tag is invalid
+                            if not valid_tag_pattern.match(entity):
+                                continue
 
-                    example[self.task.target.prediction_name] = ner_target
+                            has_valid_tuple = True
+
+                            # Tokenize the original text
+                            orig_tokens = orig.split()
+                            orig_len = len(orig_tokens)
+
+                            if orig_len == 0:
+                                continue  # Skip empty entities
+
+                            # Match tokens using a sliding window
+                            for i in range(len(text_parts) - orig_len + 1):
+                                # Check if the token window matches the entity tokens
+                                if text_parts[i:i + orig_len] == orig_tokens:
+                                    # Assign B-<ENTITY> to the first token
+                                    ner_target[i].append(f"B-{idx}-lesion")
+                                    # Assign I-<ENTITY> to subsequent tokens
+                                    for j in range(1, orig_len):
+                                        ner_target[i + j].append(f"I-{idx}-lesion")
+                                    break  # Stop after the first match for this entity
+
+                        if not has_valid_tuple:
+                            # If no valid tuples were found, set ner_target to all "O"
+                            ner_target = ["O"] * len(text_parts)
+                        else:
+                            # Convert lists to strings, using 'O' if the list is empty
+                            ner_target = ["O" if not tags else ",".join(tags) for tags in ner_target]
+
+                        ner_target = [label.split(",") for label in ner_target]
+                        example[self.task.target.prediction_name] = ner_target
+                    except Exception as e:
+                        print(f"Error processing example with uid {example.get('uid', 'unknown')}: {e}")
                 data = drop_keys_except(data, ["uid", self.task.target.prediction_name])
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")

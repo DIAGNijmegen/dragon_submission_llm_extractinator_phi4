@@ -6,7 +6,7 @@
     "Input_Field": "text",
     "Label_Field": "multi_label_binary_classification_target",
     "Parser_Format": {
-        "anonymized_text": {
+        "lesion_sizes": {
             "type": "list",
             "description": "The list of strings and their lesion numbers.",
             "items": {

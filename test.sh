@@ -55,7 +55,7 @@ docker run --rm \
     -v dragon-output-$VOLUME_SUFFIX:/input:ro \
     -v $SCRIPTPATH/test-ground-truth:/opt/app/ground-truth \
     --entrypoint python \
-    joeranbosma/dragon_submission -m dragon_eval --folds 0
+    lmmasters/dragon_submission -m dragon_eval --folds 0
 
 # if [ $? -eq 0 ]; then
 #     echo "Test for $jobname successfully passed..."
