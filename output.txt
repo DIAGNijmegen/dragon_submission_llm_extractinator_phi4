@@ -192,3 +192,17 @@ Ollama server is running...
 Pulling model: gemma2:9b...
 Error pulling model gemma2:9b: pull model manifest: Get "https://registry.ollama.ai/v2/library/gemma2/manifests/9b": dial tcp: lookup registry.ollama.ai on 192.168.65.7:53: dial udp 192.168.65.7:53: connect: network is unreachable
 Running prediction 1 of 1...
+==========================================
+Test result: 
+Evaluating 9 tasks: ['Task101_Example_sl_bin_clf', 'Task102_Example_sl_mc_clf', 'Task103_Example_mednli', 'Task104_Example_ml_bin_clf', 'Task105_Example_ml_mc_clf', 'Task106_Example_sl_reg', 'Task107_Example_ml_reg', 'Task108_Example_sl_ner', 'Task109_Example_ml_ner']
+Evaluating Task101_Example_sl_bin_clf-fold0
+Evaluating Task102_Example_sl_mc_clf-fold0
+Evaluating Task103_Example_mednli-fold0
+Evaluating Task104_Example_ml_bin_clf-fold0
+Evaluating Task105_Example_ml_mc_clf-fold0
+Evaluating Task106_Example_sl_reg-fold0
+Evaluating Task107_Example_ml_reg-fold0
+Please check that all performances are above random guessing! For tasks 101-107, the performance should be above 0.7, for tasks 108-109 above 0.2.
+==========================================
+Test completed.
+==========================================
