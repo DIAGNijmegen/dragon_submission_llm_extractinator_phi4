@@ -135,7 +135,7 @@ class DragonSubmission(DragonBaseline):
 
         extractinate(
             task_id=self.task_id,
-            model_name="mistral-nemo",
+            model_name="gemma2:2b",
             num_examples=0,
             max_context_len=8192,
             num_predict=512,
@@ -320,13 +320,9 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    example[self.task.target.prediction_name] = [
-                        example.pop("lesion_1"),
-                        example.pop("lesion_2"),
-                        example.pop("lesion_3"),
-                        example.pop("lesion_4"),
-                        example.pop("lesion_5"),
-                    ]
+                    example[self.task.target.prediction_name] = example.pop("lesion_sizes")
+                    # Go through the list of lesion sizes and fill it to a length of 5 with Nones
+                    example[self.task.target.prediction_name] = example[self.task.target.prediction_name] + [None] * (5 - len(example[self.task.target.prediction_name]))
                 data = drop_keys_except(data, ["uid", self.task.target.prediction_name])
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
@@ -383,7 +379,6 @@ class DragonSubmission(DragonBaseline):
                             # If no valid tuples were found, set ner_target to all "O"
                             ner_target = ["O"] * len(text_parts)
 
-                        ner_target = [label.split(",") for label in ner_target]
                         example[self.task.target.prediction_name] = ner_target
                     except Exception as e:
                         print(f"Error processing example with uid {example.get('uid', 'unknown')}: {e}")
@@ -426,13 +421,10 @@ class DragonSubmission(DragonBaseline):
             print_processing_message(task_id)
             try:
                 for example in data:
-                    example[self.task.target.prediction_name] = [
-                        example.pop("measurement_1"),
-                        example.pop("measurement_2"),
-                        example.pop("measurement_3"),
-                        example.pop("measurement_4"),
-                        example.pop("measurement_5"),
-                    ]
+                    example[self.task.target.prediction_name] = example.pop("lesion_sizes")
+                    # Go through the list of lesion sizes and fill it to a length of 5 with Nones
+                    example[self.task.target.prediction_name] = example[self.task.target.prediction_name] + [None] * (5 - len(example[self.task.target.prediction_name]))
+                
                 data = drop_keys_except(data, ["uid", self.task.target.prediction_name])
             except KeyError:
                 print(f"Task {task_id} does not contain the correct keys.")
@@ -489,7 +481,6 @@ class DragonSubmission(DragonBaseline):
                             # If no valid tuples were found, set ner_target to all "O"
                             ner_target = ["O"] * len(text_parts)
 
-                        ner_target = [label.split(",") for label in ner_target]
                         example[self.task.target.prediction_name] = ner_target
                     except Exception as e:
                         print(f"Error processing example with uid {example.get('uid', 'unknown')}: {e}")

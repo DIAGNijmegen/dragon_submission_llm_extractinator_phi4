@@ -1,35 +1,34 @@
 {
     "Task": "Multi-Label Regression for Medical Texts",
     "Type": "Regression",
-    "Description": "The task involves predicting multiple continuous values for given medical case descriptions. Each value corresponds to a clinically relevant metric or measurement derived from different entities or conditions identified in the input text.",
+    "Description": "The task involves extracting the size of the up to five RECIST target lesions mentioned in the text in mm rounded to the nearest whole number. The lesions are identified by roman numerals.",
     "Data_Path": "test.json",
     "Input_Field": "text",
     "Label_Field": "multi_label_regression_target",
     "Parser_Format": {
-        "measurement_1": {
-            "type": "float",
-            "description": "Predicted numerical value for the first entity or condition.",
-            "optional": true
+        "reasoning": {
+            "type": "str",
+            "description": "The thought process leading to the final answer."
         },
-        "measurement_2": {
+        "lesion_1": {
             "type": "float",
-            "description": "Predicted numerical value for the second entity or condition, if applicable.",
-            "optional": true
+            "description": "The estimated size of the first RECIST target lesion in millimeters. If not described, set to 0."
         },
-        "measurement_3": {
+        "lesion_2": {
             "type": "float",
-            "description": "Predicted numerical value for the third entity or condition, if applicable.",
-            "optional": true
+            "description": "The estimated size of the second RECIST target lesion in millimeters. If not described, set to 0."
         },
-        "measurement_4": {
+        "lesion_3": {
             "type": "float",
-            "description": "Predicted numerical value for the fourth entity or condition, if applicable.",
-            "optional": true
+            "description": "The estimated size of the third RECIST target lesion in millimeters. If not described, set to 0."
         },
-        "measurement_5": {
+        "lesion_4": {
             "type": "float",
-            "description": "Predicted numerical value for the fifth entity or condition, if applicable.",
-            "optional": true
+            "description": "The estimated size of the fourth RECIST target lesion in millimeters. If not described, set to 0."
+        },
+        "lesion_5": {
+            "type": "float",
+            "description": "The estimated size of the fifth RECIST target lesion in millimeters. If not described, set to 0."
         }
     }
 }
