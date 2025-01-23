@@ -6,7 +6,7 @@
     "Input_Field": "text",
     "Label_Field": "named_entity_recognition_target",
     "Parser_Format": {
-        "medical terminology entities": {
+        "medical_terminology_entities": {
             "type": "list",
             "description": "A list of medical terminology entities identified in the text, where each entry represents the words of the given entity.",
             "items": {
