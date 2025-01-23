@@ -1,7 +1,7 @@
 {
     "Task": "Single-Label Regression for Medical Texts",
     "Type": "Regression",
-    "Description": "The task involves extracting the size of the lesion from the text in mm.",
+    "Description": "Given the following medical report text, identify the largest lesion size mentioned in the report in millimeters. If no lesions are mentioned, the output should be 0. Round the size to the nearest whole number. Output the size as a single numerical value.",
     "Data_Path": "test.json",
     "Input_Field": "text",
     "Label_Field": "single_label_regression_target",

@@ -1,7 +1,7 @@
 {
     "Task": "Lesion and Structure Classification",
     "Type": "Classification",
-    "Description": "The task consists of identifying whether the case warrants further testing, urgent follow-up, or specialized medical attention (True) versus routine management or no further immediate action (False).",
+    "Description": "Given the following medical report text, determine if the label is True or False based on whether the report mentions a lesion with size specified in centimeters. Output True if such a lesion exists, otherwise False.",
     "Data_Path": "test.json",
     "Input_Field": "text",
     "Label_Field": "single_label_binary_classification_target",
@@ -12,7 +12,7 @@
         },
         "label": {
             "type": "bool",
-            "description": "The final classification. True if lesions or relevant structures are present, false otherwise."
+            "description": "The final classification. True if a lesion with size specified in centimeters is mentioned, otherwise False."
         }
     }
 }

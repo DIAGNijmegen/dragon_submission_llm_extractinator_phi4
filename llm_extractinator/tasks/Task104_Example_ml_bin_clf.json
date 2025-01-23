@@ -1,7 +1,7 @@
 {
     "Task": "Multi-Label Binary Classification for Medical Texts",
     "Type": "Classification",
-    "Description": "The task involves classifying detailed medical case descriptions into a multi-label binary classification target. Each target label corresponds to the presence (true) or absence (false) of predefined medical findings, conditions, or recommendations.",
+    "Description": "Given the following medical report text, determine a multi-label binary classification for lesions with physical size greater than 10 mm. Output a list of 5 booleans, where each position indicates whether lesion 1, 2, 3, 4, or 5 is present and meets the size criteria.",
     "Data_Path": "test.json",
     "Input_Field": "text",
     "Label_Field": "multi_label_binary_classification_target",
@@ -12,23 +12,23 @@
         },
         "lesion_1": {
             "type": "bool",
-            "description": "True if the size is mentioned for the first RECIST target lesion, false otherwise."
+            "description": "True if the size is mentioned for the first RECIST target lesion and it is larger than 10 mm, false otherwise."
         },
         "lesion_2": {
             "type": "bool",
-            "description": "True if the size is mentioned for the second RECIST target lesion, false otherwise."
+            "description": "True if the size is mentioned for the second RECIST target lesion and it is larger than 10 mm, false otherwise."
         },
         "lesion_3": {
             "type": "bool",
-            "description": "True if the size is mentioned for the third RECIST target lesion, false otherwise."
+            "description": "True if the size is mentioned for the third RECIST target lesion and it is larger than 10 mm, false otherwise."
         },
         "lesion_4": {
             "type": "bool",
-            "description": "True if the size is mentioned for the fourth RECIST target lesion, false otherwise."
+            "description": "True if the size is mentioned for the fourth RECIST target lesion and it is larger than 10 mm, false otherwise."
         },
         "lesion_5": {
             "type": "bool",
-            "description": "True if the size is mentioned for the fifth RECIST target lesion, false otherwise."
+            "description": "True if the size is mentioned for the fifth RECIST target lesion and it is larger than 10 mm, false otherwise."
         }
     }
 }

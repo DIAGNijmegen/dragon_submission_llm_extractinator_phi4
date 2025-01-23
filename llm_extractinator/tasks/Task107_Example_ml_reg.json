@@ -1,7 +1,7 @@
 {
     "Task": "Multi-Label Regression for Medical Texts",
     "Type": "Regression",
-    "Description": "The task involves extracting the size of the up to five RECIST target lesions mentioned in the text in mm rounded to the nearest whole number. The lesions are identified by roman numerals.",
+    "Description": "Given the following medical report text, identify the sizes of up to 5 lesions mentioned in the report in millimeters. Use Roman numerals (I, II, III, IV, V) in the text to determine the order of the lesions. If a lesion is not present, output 0.0 for its size. Round the sizes to the nearest whole number.",
     "Data_Path": "test.json",
     "Input_Field": "text",
     "Label_Field": "multi_label_regression_target",
