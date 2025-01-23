@@ -12,23 +12,23 @@
         },
         "lesion_1": {
             "type": "float",
-            "description": "The estimated size of the first RECIST target lesion in millimeters. If not described, set to 0."
+            "description": "The estimated size of the first RECIST target lesion in millimeters. If not described, set to 0.0."
         },
         "lesion_2": {
             "type": "float",
-            "description": "The estimated size of the second RECIST target lesion in millimeters. If not described, set to 0."
+            "description": "The estimated size of the second RECIST target lesion in millimeters. If not described, set to 0.0."
         },
         "lesion_3": {
             "type": "float",
-            "description": "The estimated size of the third RECIST target lesion in millimeters. If not described, set to 0."
+            "description": "The estimated size of the third RECIST target lesion in millimeters. If not described, set to 0.0."
         },
         "lesion_4": {
             "type": "float",
-            "description": "The estimated size of the fourth RECIST target lesion in millimeters. If not described, set to 0."
+            "description": "The estimated size of the fourth RECIST target lesion in millimeters. If not described, set to 0.0."
         },
         "lesion_5": {
             "type": "float",
-            "description": "The estimated size of the fifth RECIST target lesion in millimeters. If not described, set to 0."
+            "description": "The estimated size of the fifth RECIST target lesion in millimeters. If not described, set to 0.0."
         }
     }
 }
